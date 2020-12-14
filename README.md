@@ -653,3 +653,44 @@ public MemoHelpEvt(MemoHelp jmi) {
 
 * 수업내용을 전부 기억할 수는 없다. 기록하고 필요할 때 찾을 수 있는 환경을 만들자.
 
+
+---
+
+## 수정사항
+
+* 2020-12-11 (강사님께 코드 리뷰)
+
+	1. Instance 변수를 사용할 때 나는 local변수와 구분하기 위해 this를 붙여서 사용하였다. 하지만 강사님께서는 instance안에서 유일한 변수이면 this를 쓰지 않는 편이 좋다고 말씀하셨다.
+
+		* this를 사용하면 동일한 변수명이 있는지를 확인해야 할 수도 있어 혼란을 야기.
+
+	2. API를 참고하여 사용한 method에서 Exception을 throws하고 있다면 method를 호출한 곳에서 try~catch를 해주는 것이 복잡도를 줄일 수 있다. (꼭 이게 정답이라는 것이 아닌 대부분 사용을 그렇게 한다는 말씀하셨다.)
+
+* code 수정
+
+	* Font Dialog에서 각 Font , Style, Size를 선택할 때마다 각각의 값이 초기화 되는 오류를 발견
+
+	* 수정 전 code 
+		
+		<img src = https://user-images.githubusercontent.com/74294325/101882353-21721a00-3bd9-11eb-8480-bd9328e88ced.png>
+
+		* font,style,size의 값을 넣어주는 code
+			```java
+			font = jmf.getPreviewFont();
+			style = jmf.getPreviewStyle();
+			size = jmf.getPreviewSize();
+			```
+		* 이 코드들이 valueChanged()안에 들어 있어서 한번 method를 호출 할 때마다 2번 값을 할당하여 초기화가 진행되고 있었다.
+
+	* 수정 후
+
+		<img src = https://user-images.githubusercontent.com/74294325/102028080-aaf93600-3deb-11eb-9340-82e00da99952.PNG>
+
+
+		* font,style,size의 값을 넣어주는 code
+			```java
+			font = jmf.getPreviewFont();
+			style = jmf.getPreviewStyle();
+			size = jmf.getPreviewSize();
+			```
+		* 이 코드들을 생성자 안으로 넣어 한번만 호출되게 하여 nullpointerexception을 피하면서 두번 실행되지 않는 코드로 바꿈.
